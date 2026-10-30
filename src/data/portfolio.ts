@@ -1,5 +1,7 @@
 import type { PortfolioData } from '../types/portfolio';
 import resumePdf from '../assets/Manoj_Resume_Bengaluru.pdf';
+import astroAuraImg from '../assets/AA24_image.png';
+import eaziQuoteImg from '../assets/EaziQuote_image.png';
 
 const data: PortfolioData = {
   profile: {
@@ -61,6 +63,7 @@ const data: PortfolioData = {
       title: 'AstroAura24',
       subtitle: 'E-commerce & Live Consultation Platform',
       description: 'A live commercial e-commerce and live consultation booking platform engineered for seamless crystal merchandise purchases, online payment processing, and concurrency-safe consultation scheduling.',
+      image: astroAuraImg,
       keyPoints: [
         'Implemented full e-commerce shopping workflows with Razorpay payment gateway integration for secure checkout.',
         'Engineered consultation booking with concurrency-safe slot handling to eliminate double-booking conflicts.',
@@ -76,8 +79,9 @@ const data: PortfolioData = {
     {
       id: 'biz-mobile',
       title: 'Business Management Mobile Application',
-      subtitle: 'Cross-Platform Mobile Application',
+      subtitle: 'EaziQuote · Cross-Platform Mobile Application',
       description: 'A comprehensive cross-platform business management application for Android and iOS designed to manage clients, draft quotations, issue invoices, and track payments.',
+      image: eaziQuoteImg,
       keyPoints: [
         'Implemented intuitive mobile application interface with secure authentication, onboarding, and nested navigation.',
         'Built end-to-end client management, quotations drafting, invoice generation, and payment tracking modules.',

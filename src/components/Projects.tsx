@@ -3,15 +3,8 @@ import {
   ExternalLink,
   Globe,
   Smartphone,
-  ShieldCheck,
-  CreditCard,
-  CalendarCheck,
-  Search,
-  FileText,
-  DollarSign,
-  Users,
   CheckCircle2,
-  Lock,
+  Layers,
 } from 'lucide-react';
 import type { Project } from '../types/portfolio';
 
@@ -54,7 +47,7 @@ export default function Projects({ projects }: { projects: Project[] }) {
               transition={{ duration: 0.6 }}
               className="bg-white rounded-3xl border border-neutral-200 shadow-sm hover:shadow-md transition-all overflow-hidden"
             >
-              <div className="grid lg:grid-cols-12 gap-0">
+              <div className="grid lg:grid-cols-12 gap-0 items-stretch">
                 
                 {/* Left: Project Details (col-span-7) */}
                 <div className="lg:col-span-7 p-8 sm:p-10 flex flex-col justify-between">
@@ -143,103 +136,46 @@ export default function Projects({ projects }: { projects: Project[] }) {
                   )}
                 </div>
 
-                {/* Right: Technical Browser Chrome Mockup (col-span-5) */}
-                <div className="lg:col-span-5 bg-neutral-900 p-6 sm:p-8 flex flex-col justify-center border-t lg:border-t-0 lg:border-l border-neutral-800">
-                  <div className="rounded-xl bg-[#111111] border border-neutral-700 shadow-xl overflow-hidden font-sans">
-                    {/* Browser Chrome Header */}
-                    <div className="px-4 py-2.5 bg-neutral-800/90 border-b border-neutral-700 flex items-center gap-3">
-                      <div className="flex items-center gap-1.5">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
-                      </div>
-                      <div className="flex-1 max-w-[240px] mx-auto bg-neutral-900 px-3 py-1 rounded-md text-[11px] font-mono text-neutral-300 flex items-center justify-center gap-1.5 border border-neutral-700/60 truncate">
-                        <Lock size={10} className="text-[#31AAA9]" />
-                        <span>https://astroaura24.com</span>
-                      </div>
-                    </div>
-
-                    {/* Mockup Body: High-fidelity Platform Preview */}
-                    <div className="p-5 text-neutral-200 space-y-4">
-                      {/* Brand Banner */}
-                      <div className="flex items-center justify-between pb-3 border-b border-neutral-800">
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 rounded bg-[#31AAA9] flex items-center justify-center text-white font-bold text-xs">
-                            A
-                          </div>
-                          <span className="font-bold text-sm tracking-tight text-white">AstroAura24</span>
-                        </div>
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                          Production Active
+                {/* Right: Product Image Fitting Container (col-span-5) */}
+                <div className="lg:col-span-5 border-t lg:border-t-0 lg:border-l border-neutral-200 bg-neutral-100 relative min-h-[280px] sm:min-h-[380px] lg:min-h-full overflow-hidden group">
+                  {astroProject.liveUrl ? (
+                    <a
+                      href={astroProject.liveUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block w-full h-full relative"
+                      title="Visit AstroAura24"
+                    >
+                      <img
+                        src={astroProject.image}
+                        alt="AstroAura24 - E-commerce & Live Consultation Platform"
+                        className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                      <div className="absolute top-4 right-4 z-10">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md border border-neutral-200/90 text-[11px] font-mono font-bold text-neutral-800 shadow-sm group-hover:border-[#31AAA9] transition-colors">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#31AAA9] animate-pulse" />
+                          Live Website
                         </span>
                       </div>
-
-                      {/* Consultation Booking Widget Preview */}
-                      <div className="bg-neutral-800/60 rounded-lg p-3.5 border border-neutral-700/70">
-                        <div className="flex items-center justify-between text-xs mb-2">
-                          <span className="font-semibold text-neutral-200 flex items-center gap-1.5">
-                            <CalendarCheck size={14} className="text-[#31AAA9]" />
-                            Live Consultation Booking
-                          </span>
-                          <span className="text-[10px] font-mono text-[#31AAA9] bg-[#31AAA9]/10 px-2 py-0.5 rounded">
-                            Concurrency-Safe
-                          </span>
-                        </div>
-                        <div className="grid grid-cols-3 gap-1.5 my-2">
-                          <div className="p-1.5 rounded bg-neutral-900 border border-neutral-700 text-center text-[10px] text-neutral-300 font-mono">
-                            10:00 AM
-                          </div>
-                          <div className="p-1.5 rounded bg-[#31AAA9] text-white text-center text-[10px] font-mono font-bold">
-                            11:30 AM
-                          </div>
-                          <div className="p-1.5 rounded bg-neutral-900 border border-neutral-700 text-center text-[10px] text-neutral-300 font-mono">
-                            02:00 PM
-                          </div>
-                        </div>
-                        <div className="text-[10px] text-neutral-400 flex items-center justify-between pt-1">
-                          <span>Slot Lock: Active</span>
-                          <span className="text-emerald-400 font-mono">No double-booking</span>
-                        </div>
-                      </div>
-
-                      {/* Razorpay Payment Flow Preview */}
-                      <div className="bg-neutral-800/60 rounded-lg p-3.5 border border-neutral-700/70">
-                        <div className="flex items-center justify-between text-xs mb-2">
-                          <span className="font-semibold text-neutral-200 flex items-center gap-1.5">
-                            <CreditCard size={14} className="text-[#1CC5DC]" />
-                            Razorpay Payment Gateway
-                          </span>
-                          <span className="text-[10px] font-mono text-emerald-400 flex items-center gap-1">
-                            <ShieldCheck size={11} />
-                            Verified
-                          </span>
-                        </div>
-                        <div className="p-2 bg-neutral-900 rounded text-[11px] font-mono text-neutral-300 flex items-center justify-between border border-neutral-800">
-                          <span>Order #AA-9402</span>
-                          <span className="text-white font-bold">₹1,499.00</span>
-                        </div>
-                      </div>
-
-                      {/* Admin Dashboard Metric snippet */}
-                      <div className="grid grid-cols-2 gap-2 text-center text-[10px] font-mono">
-                        <div className="p-2 rounded bg-neutral-900/80 border border-neutral-800">
-                          <span className="text-neutral-500 block">Orders Logged</span>
-                          <span className="text-neutral-200 font-bold text-xs">Real-time DB</span>
-                        </div>
-                        <div className="p-2 rounded bg-neutral-900/80 border border-neutral-800">
-                          <span className="text-neutral-500 block">Inventory</span>
-                          <span className="text-[#31AAA9] font-bold text-xs">Auto-Sync</span>
-                        </div>
-                      </div>
+                    </a>
+                  ) : (
+                    <div className="w-full h-full relative">
+                      <img
+                        src={astroProject.image}
+                        alt="AstroAura24 - E-commerce & Live Consultation Platform"
+                        className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                        loading="lazy"
+                      />
                     </div>
-                  </div>
+                  )}
                 </div>
 
               </div>
             </motion.div>
           )}
 
-          {/* PROJECT 2: Business Management Mobile Application */}
+          {/* PROJECT 2: Business Management Mobile Application (EaziQuote) */}
           {bizMobileProject && (
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -248,87 +184,24 @@ export default function Projects({ projects }: { projects: Project[] }) {
               transition={{ duration: 0.6 }}
               className="bg-white rounded-3xl border border-neutral-200 shadow-sm hover:shadow-md transition-all overflow-hidden"
             >
-              <div className="grid lg:grid-cols-12 gap-0">
+              <div className="grid lg:grid-cols-12 gap-0 items-stretch">
                 
-                {/* Left: Technical Mobile Device Frame (col-span-5) */}
-                <div className="lg:col-span-5 bg-neutral-900 p-6 sm:p-8 flex flex-col justify-center items-center border-b lg:border-b-0 lg:border-r border-neutral-800 order-2 lg:order-1">
-                  
-                  {/* Smartphone Frame Mockup */}
-                  <div className="w-full max-w-[300px] rounded-[36px] bg-[#111111] p-3 border-4 border-neutral-700 shadow-2xl font-sans">
-                    
-                    {/* Device Screen */}
-                    <div className="rounded-[28px] bg-neutral-900 p-4 border border-neutral-800 text-neutral-200 text-xs">
-                      
-                      {/* Dynamic Notch / Status */}
-                      <div className="flex items-center justify-between pb-3 mb-3 border-b border-neutral-800 text-[10px] font-mono text-neutral-400">
-                        <span>9:41</span>
-                        <div className="w-16 h-3.5 bg-neutral-800 rounded-full mx-auto" />
-                        <span className="text-[#31AAA9]">5G • 100%</span>
-                      </div>
-
-                      {/* App Header */}
-                      <div className="flex items-center justify-between mb-3">
-                        <div>
-                          <span className="text-[10px] font-mono text-neutral-400 uppercase">BizManager App</span>
-                          <h5 className="font-extrabold text-sm text-white">Dashboard</h5>
-                        </div>
-                        <span className="px-2 py-0.5 rounded-full bg-[#31AAA9]/20 text-[#31AAA9] text-[9px] font-mono font-bold">
-                          Online Sync
-                        </span>
-                      </div>
-
-                      {/* Search & Filter Bar (Debounced) */}
-                      <div className="flex items-center gap-1.5 p-2 bg-neutral-800/80 rounded-lg text-[10px] text-neutral-400 border border-neutral-700 mb-3">
-                        <Search size={12} className="text-[#31AAA9]" />
-                        <span className="truncate">Search clients, invoices...</span>
-                        <span className="ml-auto text-[9px] font-mono bg-neutral-900 px-1.5 py-0.5 rounded text-neutral-400">300ms</span>
-                      </div>
-
-                      {/* Invoice Cards */}
-                      <div className="space-y-2 mb-3">
-                        <div className="p-2.5 rounded-xl bg-neutral-800/90 border border-neutral-700">
-                          <div className="flex items-center justify-between text-[11px] mb-1">
-                            <span className="font-bold text-white flex items-center gap-1">
-                              <FileText size={12} className="text-[#31AAA9]" />
-                              INV-2026-084
-                            </span>
-                            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">
-                              PAID
-                            </span>
-                          </div>
-                          <div className="flex items-center justify-between text-[10px] text-neutral-400">
-                            <span>Apex Global Corp</span>
-                            <span className="font-mono text-white font-bold">₹48,500</span>
-                          </div>
-                        </div>
-
-                        <div className="p-2.5 rounded-xl bg-neutral-800/90 border border-neutral-700">
-                          <div className="flex items-center justify-between text-[11px] mb-1">
-                            <span className="font-bold text-white flex items-center gap-1">
-                              <DollarSign size={12} className="text-amber-400" />
-                              QUO-2026-112
-                            </span>
-                            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold">
-                              PENDING
-                            </span>
-                          </div>
-                          <div className="flex items-center justify-between text-[10px] text-neutral-400">
-                            <span>Nova Technologies</span>
-                            <span className="font-mono text-white font-bold">₹24,000</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Navigation bar simulation */}
-                      <div className="pt-2 border-t border-neutral-800 grid grid-cols-4 gap-1 text-center text-[9px] text-neutral-400">
-                        <span className="text-[#31AAA9] font-bold">Clients</span>
-                        <span>Quotes</span>
-                        <span>Invoices</span>
-                        <span>Payments</span>
-                      </div>
+                {/* Left: Mobile App Image Fitting Container (col-span-5) */}
+                <div className="lg:col-span-5 border-b lg:border-b-0 lg:border-r border-neutral-200 bg-neutral-100 relative min-h-[280px] sm:min-h-[380px] lg:min-h-full overflow-hidden group order-2 lg:order-1">
+                  <div className="w-full h-full relative">
+                    <img
+                      src={bizMobileProject.image}
+                      alt="EaziQuote - Business Management Mobile Application"
+                      className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                    <div className="absolute top-4 left-4 z-10">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md border border-neutral-200/90 text-[11px] font-mono font-bold text-neutral-800 shadow-sm">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#31AAA9] animate-pulse" />
+                        React Native Mobile App
+                      </span>
                     </div>
                   </div>
-
                 </div>
 
                 {/* Right: Project Details (col-span-7) */}
@@ -402,7 +275,7 @@ export default function Projects({ projects }: { projects: Project[] }) {
                   {/* Architecture footer badge */}
                   <div className="pt-6 border-t border-neutral-100 flex items-center justify-between text-xs text-neutral-500 font-mono">
                     <span className="flex items-center gap-1.5">
-                      <Users size={14} className="text-[#31AAA9]" />
+                      <Layers size={14} className="text-[#31AAA9]" />
                       <span>Enterprise CRM & Financial Workflows</span>
                     </span>
                     <span className="text-[#31AAA9] font-bold">
