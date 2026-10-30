@@ -10,6 +10,7 @@ export interface Project {
   category: 'Full Stack' | 'Mobile' | 'Web' | 'Systems';
   featured: boolean;
   image?: string;
+  badge?: string;
 }
 
 export interface Experience {
@@ -17,6 +18,7 @@ export interface Experience {
   role: string;
   company: string;
   location: string;
+  workMode?: string;
   period: string;
   bullets: string[];
   tech: string[];
@@ -65,6 +67,9 @@ export interface Profile {
   headline: string;
   tagline: string;
   bio: string;
+  heroHeading: string;
+  heroIntro: string;
+  heroDescription: string;
   location: string;
   email: string;
   phone: string;
@@ -79,7 +84,7 @@ export interface PortfolioData {
   projects: Project[];
   experiences: Experience[];
   skillCategories: SkillCategory[];
-  publications: Publication[];
+  publications?: Publication[];
   certifications: Certification[];
   education: Education[];
 }
