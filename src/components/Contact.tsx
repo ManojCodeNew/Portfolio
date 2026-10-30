@@ -11,6 +11,8 @@ import {
   ExternalLink,
   Loader2,
   MessageSquare,
+  RefreshCw,
+  Sparkles,
 } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from './Icons';
 import type { Profile } from '../types/portfolio';
@@ -29,6 +31,11 @@ interface FormErrors {
   message?: string;
 }
 
+type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
+
+const WEB3FORMS_ACCESS_KEY =
+  import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || '3e8747d6-bcae-42c0-b9f7-f5f502223792';
+
 export default function Contact({ profile }: { profile: Profile }) {
   const [formData, setFormData] = useState<FormState>({
     name: '',
@@ -38,8 +45,8 @@ export default function Contact({ profile }: { profile: Profile }) {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [status, setStatus] = useState<FormStatus>('idle');
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const [copiedEmail, setCopiedEmail] = useState(false);
 
   const validate = (): boolean => {
@@ -71,20 +78,50 @@ export default function Contact({ profile }: { profile: Profile }) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!validate()) {
       return;
     }
 
-    setIsSubmitting(true);
+    setStatus('submitting');
+    setErrorMessage('');
 
-    // Realistic asynchronous dispatch
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-    }, 700);
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          subject: `[Portfolio Inquiry] ${formData.subject.trim()}`,
+          message: formData.message.trim(),
+          from_name: `${formData.name.trim()} via Portfolio`,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.status === 200 && result.success) {
+        setStatus('success');
+      } else {
+        setStatus('error');
+        setErrorMessage(
+          result.message || 'Something went wrong while sending your message. Please try again or reach out via email.'
+        );
+      }
+    } catch (err) {
+      console.error('Contact form submission error:', err);
+      setStatus('error');
+      setErrorMessage(
+        'Unable to connect to the email server. Please check your connection or send directly via your mail client.'
+      );
+    }
   };
 
   const handleOpenMailClient = () => {
@@ -99,7 +136,8 @@ export default function Contact({ profile }: { profile: Profile }) {
   const handleResetForm = () => {
     setFormData({ name: '', email: '', subject: '', message: '' });
     setErrors({});
-    setIsSubmitted(false);
+    setStatus('idle');
+    setErrorMessage('');
   };
 
   const copyEmail = () => {
@@ -228,12 +266,12 @@ export default function Contact({ profile }: { profile: Profile }) {
                 Looking for a dedicated Software Developer?
               </span>
               <p className="text-neutral-700 leading-relaxed">
-                Available for full-time Software Developer, Frontend Developer, and React / React Native engineering roles. Quick response time guaranteed.
+                Available for full-time Software Developer, Frontend Developer, and React / React Native engineering roles. Direct inbox delivery active.
               </p>
             </div>
           </motion.div>
 
-          {/* RIGHT: Validated Contact Form (col-span-7) */}
+          {/* RIGHT: Validated Contact Form with Smooth States (col-span-7) */}
           <motion.div
             className="lg:col-span-7 bg-[#F5F7F7]/60 rounded-3xl p-7 sm:p-10 border border-neutral-200 shadow-sm"
             initial={{ opacity: 0, x: 20 }}
@@ -241,52 +279,118 @@ export default function Contact({ profile }: { profile: Profile }) {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <h3 className="text-xl font-extrabold text-[#111111] tracking-tight mb-2">
-              Send a Direct Message
-            </h3>
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-xl font-extrabold text-[#111111] tracking-tight">
+                Send a Direct Message
+              </h3>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-mono font-semibold">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                Direct Inbox Active
+              </span>
+            </div>
             <p className="text-xs text-neutral-500 mb-6 font-mono">
-              Fill in your details below and I will respond to your inquiry promptly.
+              Messages submitted here are delivered straight to Manoj's Gmail inbox.
             </p>
 
             <AnimatePresence mode="wait">
-              {isSubmitted ? (
+              {status === 'success' ? (
+                /* SUCCESS SCREEN */
                 <motion.div
-                  key="success-message"
+                  key="success-screen"
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  className="bg-white rounded-2xl p-8 border border-emerald-200 text-center space-y-4 shadow-sm"
+                  transition={{ duration: 0.3 }}
+                  className="bg-white rounded-2xl p-8 sm:p-10 border border-emerald-200 text-center space-y-5 shadow-sm"
                 >
-                  <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
-                    <CheckCircle2 size={26} />
+                  <div className="w-16 h-16 rounded-full bg-emerald-50 border-2 border-emerald-200 text-emerald-600 flex items-center justify-center mx-auto shadow-xs">
+                    <CheckCircle2 size={32} />
                   </div>
+
                   <div>
-                    <h4 className="text-lg font-bold text-[#111111]">
-                      Thank You, {formData.name}!
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100/70 text-emerald-800 text-xs font-mono font-bold uppercase tracking-wider mb-2">
+                      <Sparkles size={12} />
+                      Delivered to Inbox
+                    </span>
+                    <h4 className="text-2xl font-extrabold text-[#111111] tracking-tight">
+                      Message Sent Successfully!
                     </h4>
-                    <p className="text-sm text-neutral-600 mt-1 max-w-md mx-auto leading-relaxed">
-                      Your message has been captured successfully. You can also open your mail client directly to send a pre-formatted email.
+                    <p className="text-sm text-neutral-600 mt-2 max-w-md mx-auto leading-relaxed">
+                      Thank you, <strong className="text-neutral-800">{formData.name}</strong>. Your message has been delivered to Manoj's personal inbox. You will receive a response at <strong className="text-neutral-800">{formData.email}</strong> shortly.
                     </p>
                   </div>
 
-                  <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
-                    <button
-                      onClick={handleOpenMailClient}
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#31AAA9] hover:bg-[#269695] text-white text-xs font-bold transition-all shadow-xs"
-                    >
-                      <Mail size={14} />
-                      <span>Launch In Mail Client</span>
-                    </button>
+                  {/* Summary Box */}
+                  <div className="p-4 rounded-xl bg-[#F5F7F7] border border-neutral-200 text-left text-xs font-mono space-y-1.5 max-w-md mx-auto">
+                    <div className="text-neutral-500 flex justify-between">
+                      <span>Subject:</span>
+                      <span className="font-semibold text-neutral-800 truncate max-w-[220px]">
+                        {formData.subject}
+                      </span>
+                    </div>
+                    <div className="text-neutral-500 flex justify-between">
+                      <span>From:</span>
+                      <span className="font-semibold text-neutral-800 truncate max-w-[220px]">
+                        {formData.email}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
                     <button
                       onClick={handleResetForm}
-                      className="px-5 py-2.5 rounded-xl border border-neutral-300 hover:border-neutral-400 text-neutral-700 text-xs font-semibold bg-white transition-all"
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#31AAA9] hover:bg-[#269695] text-white text-xs font-bold transition-all shadow-xs"
                     >
+                      <RefreshCw size={13} />
                       <span>Send Another Message</span>
                     </button>
                   </div>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit} noValidate className="space-y-4">
+                /* FORM VIEW (Idle, Submitting, or Error) */
+                <motion.form
+                  key="contact-form"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onSubmit={handleSubmit}
+                  noValidate
+                  className="space-y-4"
+                >
+                  {/* Inline Error Alert if error occurred */}
+                  {status === 'error' && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-800 space-y-2"
+                    >
+                      <div className="flex items-center gap-2 font-bold font-mono">
+                        <AlertCircle size={15} className="text-rose-600 shrink-0" />
+                        <span>Delivery Issue</span>
+                      </div>
+                      <p className="leading-relaxed">
+                        {errorMessage || 'Unable to deliver the message at this moment. You can retry or send directly via your mail client below.'}
+                      </p>
+                      <div className="pt-1 flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          onClick={handleOpenMailClient}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-mono font-semibold text-[11px] transition-colors"
+                        >
+                          <Mail size={12} />
+                          <span>Open in Email App</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setStatus('idle')}
+                          className="px-3 py-1.5 rounded-lg border border-rose-300 bg-white text-rose-700 font-mono font-semibold text-[11px] hover:bg-rose-50 transition-colors"
+                        >
+                          Dismiss
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+
                   {/* Name and Email Row */}
                   <div className="grid sm:grid-cols-2 gap-4">
                     {/* Name */}
@@ -297,13 +401,14 @@ export default function Contact({ profile }: { profile: Profile }) {
                       <input
                         id="name"
                         type="text"
+                        disabled={status === 'submitting'}
                         value={formData.name}
                         onChange={e => {
                           setFormData({ ...formData, name: e.target.value });
                           if (errors.name) setErrors({ ...errors, name: undefined });
                         }}
                         placeholder="e.g. Jane Doe"
-                        className={`w-full px-4 py-3 rounded-xl bg-white border text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none transition-colors ${
+                        className={`w-full px-4 py-3 rounded-xl bg-white border text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none transition-colors disabled:opacity-60 disabled:cursor-not-allowed ${
                           errors.name
                             ? 'border-rose-400 focus:border-rose-500'
                             : 'border-neutral-200 focus:border-[#31AAA9]'
@@ -325,13 +430,14 @@ export default function Contact({ profile }: { profile: Profile }) {
                       <input
                         id="email"
                         type="email"
+                        disabled={status === 'submitting'}
                         value={formData.email}
                         onChange={e => {
                           setFormData({ ...formData, email: e.target.value });
                           if (errors.email) setErrors({ ...errors, email: undefined });
                         }}
                         placeholder="you@company.com"
-                        className={`w-full px-4 py-3 rounded-xl bg-white border text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none transition-colors ${
+                        className={`w-full px-4 py-3 rounded-xl bg-white border text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none transition-colors disabled:opacity-60 disabled:cursor-not-allowed ${
                           errors.email
                             ? 'border-rose-400 focus:border-rose-500'
                             : 'border-neutral-200 focus:border-[#31AAA9]'
@@ -354,13 +460,14 @@ export default function Contact({ profile }: { profile: Profile }) {
                     <input
                       id="subject"
                       type="text"
+                      disabled={status === 'submitting'}
                       value={formData.subject}
                       onChange={e => {
                         setFormData({ ...formData, subject: e.target.value });
                         if (errors.subject) setErrors({ ...errors, subject: undefined });
                       }}
-                      placeholder="e.g. Full-Time Opportunity / Project Discussion"
-                      className={`w-full px-4 py-3 rounded-xl bg-white border text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none transition-colors ${
+                      placeholder="e.g. Software Developer Opportunity / Project Discussion"
+                      className={`w-full px-4 py-3 rounded-xl bg-white border text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none transition-colors disabled:opacity-60 disabled:cursor-not-allowed ${
                         errors.subject
                           ? 'border-rose-400 focus:border-rose-500'
                           : 'border-neutral-200 focus:border-[#31AAA9]'
@@ -382,13 +489,14 @@ export default function Contact({ profile }: { profile: Profile }) {
                     <textarea
                       id="message"
                       rows={4}
+                      disabled={status === 'submitting'}
                       value={formData.message}
                       onChange={e => {
                         setFormData({ ...formData, message: e.target.value });
                         if (errors.message) setErrors({ ...errors, message: undefined });
                       }}
                       placeholder="Tell me about your team, role, or project requirements..."
-                      className={`w-full px-4 py-3 rounded-xl bg-white border text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none transition-colors resize-y ${
+                      className={`w-full px-4 py-3 rounded-xl bg-white border text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none transition-colors resize-y disabled:opacity-60 disabled:cursor-not-allowed ${
                         errors.message
                           ? 'border-rose-400 focus:border-rose-500'
                           : 'border-neutral-200 focus:border-[#31AAA9]'
@@ -406,13 +514,13 @@ export default function Contact({ profile }: { profile: Profile }) {
                   <div className="pt-2">
                     <button
                       type="submit"
-                      disabled={isSubmitting}
+                      disabled={status === 'submitting'}
                       className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#31AAA9] hover:bg-[#269695] disabled:opacity-70 text-white font-bold text-sm shadow-sm hover:shadow transition-all"
                     >
-                      {isSubmitting ? (
+                      {status === 'submitting' ? (
                         <>
                           <Loader2 size={16} className="animate-spin" />
-                          <span>Sending Message...</span>
+                          <span>Delivering to Manoj's Inbox...</span>
                         </>
                       ) : (
                         <>
@@ -422,7 +530,7 @@ export default function Contact({ profile }: { profile: Profile }) {
                       )}
                     </button>
                   </div>
-                </form>
+                </motion.form>
               )}
             </AnimatePresence>
           </motion.div>
