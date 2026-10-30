@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import avatarImg from '../assets/mc_avatar.png';
 
 const navItems = [
   { label: 'About', id: 'about' },
@@ -68,9 +69,11 @@ export default function Navbar() {
           className="group flex items-center gap-2.5 text-left focus:outline-none"
           aria-label="Manoj C - Home"
         >
-          <div className="w-8 h-8 rounded-lg bg-[#111111] flex items-center justify-center text-white font-mono font-bold text-sm tracking-tight group-hover:bg-[#31AAA9] transition-colors">
-            MC
-          </div>
+          <img
+            src={avatarImg}
+            alt="Manoj C"
+            className="w-8 h-8 rounded-lg object-cover object-top border border-neutral-200 group-hover:border-[#31AAA9] transition-colors"
+          />
           <div className="flex flex-col">
             <span className="font-extrabold text-base tracking-tight text-[#111111] flex items-center">
               MANOJ C<span className="text-[#31AAA9] font-black text-lg leading-none ml-0.5">.</span>

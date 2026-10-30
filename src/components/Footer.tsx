@@ -1,5 +1,6 @@
 import { ArrowUp, Mail, Phone } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from './Icons';
+import avatarImg from '../assets/mc_avatar.png';
 
 const navLinks = [
   { label: 'About', id: 'about' },
@@ -48,9 +49,11 @@ export default function Footer({
               onClick={scrollToTop}
               className="flex items-center gap-2.5 text-left focus:outline-none group"
             >
-              <div className="w-8 h-8 rounded-lg bg-neutral-800 border border-neutral-700 flex items-center justify-center text-white font-mono font-bold text-sm tracking-tight group-hover:bg-[#31AAA9] transition-colors">
-                MC
-              </div>
+              <img
+                src={avatarImg}
+                alt="Manoj C"
+                className="w-8 h-8 rounded-lg object-cover object-top group-hover:border-[#31AAA9] transition-colors"
+              />
               <span className="font-extrabold text-xl tracking-tight text-white flex items-center">
                 MANOJ C<span className="text-[#31AAA9] font-black text-2xl leading-none ml-0.5">.</span>
               </span>
