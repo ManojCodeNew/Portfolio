@@ -38,10 +38,10 @@ export default function Footer({
   return (
     <footer className="bg-[#111111] text-white border-t border-neutral-800 relative z-10">
       <div className="max-w-6xl mx-auto px-6 py-16">
-        
+
         {/* Main Footer Grid */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-neutral-800/80">
-          
+
           {/* Brand Info (col-span-5) */}
           <div className="md:col-span-5 space-y-4">
             <button
@@ -62,7 +62,7 @@ export default function Footer({
 
             <div className="flex items-center gap-2 text-xs font-mono text-neutral-400 pt-1">
               <span className="w-2 h-2 rounded-full bg-[#31AAA9]" />
-              <span>Available for opportunities · Bengaluru, India</span>
+              <span>Available for opportunities · Bengaluru, Ahmedabad, Mangalore India</span>
             </div>
           </div>
 
