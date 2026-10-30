@@ -34,7 +34,7 @@ interface FormErrors {
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
 
 const WEB3FORMS_ACCESS_KEY =
-  import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || '3e8747d6-bcae-42c0-b9f7-f5f502223792';
+  import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || null;
 
 export default function Contact({ profile }: { profile: Profile }) {
   const [formData, setFormData] = useState<FormState>({
@@ -74,6 +74,10 @@ export default function Contact({ profile }: { profile: Profile }) {
       newErrors.message = 'Message must be at least 10 characters long.';
     }
 
+    if (WEB3FORMS_ACCESS_KEY === null || !WEB3FORMS_ACCESS_KEY) {
+      newErrors.message = `Your message couldnt be sent right now.Please try again in a little while or contact me directly through email`;
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -82,6 +86,14 @@ export default function Contact({ profile }: { profile: Profile }) {
     e.preventDefault();
 
     if (!validate()) {
+      return;
+    }
+
+    if (WEB3FORMS_ACCESS_KEY === null || !WEB3FORMS_ACCESS_KEY) {
+      setStatus('error');
+      setErrorMessage(
+        `Your message couldnt be sent right now.Please try again in a little while or contact me directly through email`
+      );
       return;
     }
 
@@ -149,7 +161,7 @@ export default function Contact({ profile }: { profile: Profile }) {
   return (
     <section id="contact" className="py-24 bg-white border-b border-neutral-200 relative">
       <div className="max-w-6xl mx-auto px-6">
-        
+
         {/* Section Heading */}
         <motion.div
           className="max-w-2xl mb-16"
@@ -171,7 +183,7 @@ export default function Contact({ profile }: { profile: Profile }) {
         </motion.div>
 
         <div className="grid lg:grid-cols-12 gap-12 items-start">
-          
+
           {/* LEFT: Direct Contact Channels (col-span-5) */}
           <motion.div
             className="lg:col-span-5 flex flex-col gap-6"
@@ -181,7 +193,7 @@ export default function Contact({ profile }: { profile: Profile }) {
             transition={{ duration: 0.5 }}
           >
             <div className="space-y-3.5">
-              
+
               {/* Email Card */}
               <div className="bg-[#F5F7F7]/70 rounded-2xl p-5 border border-neutral-200 hover:border-[#31AAA9]/40 transition-colors">
                 <div className="flex items-center justify-between mb-2">
@@ -408,11 +420,10 @@ export default function Contact({ profile }: { profile: Profile }) {
                           if (errors.name) setErrors({ ...errors, name: undefined });
                         }}
                         placeholder="e.g. Jane Doe"
-                        className={`w-full px-4 py-3 rounded-xl bg-white border text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none transition-colors disabled:opacity-60 disabled:cursor-not-allowed ${
-                          errors.name
-                            ? 'border-rose-400 focus:border-rose-500'
-                            : 'border-neutral-200 focus:border-[#31AAA9]'
-                        }`}
+                        className={`w-full px-4 py-3 rounded-xl bg-white border text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none transition-colors disabled:opacity-60 disabled:cursor-not-allowed ${errors.name
+                          ? 'border-rose-400 focus:border-rose-500'
+                          : 'border-neutral-200 focus:border-[#31AAA9]'
+                          }`}
                       />
                       {errors.name && (
                         <p className="mt-1 text-xs text-rose-500 flex items-center gap-1 font-mono">
@@ -437,11 +448,10 @@ export default function Contact({ profile }: { profile: Profile }) {
                           if (errors.email) setErrors({ ...errors, email: undefined });
                         }}
                         placeholder="you@company.com"
-                        className={`w-full px-4 py-3 rounded-xl bg-white border text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none transition-colors disabled:opacity-60 disabled:cursor-not-allowed ${
-                          errors.email
-                            ? 'border-rose-400 focus:border-rose-500'
-                            : 'border-neutral-200 focus:border-[#31AAA9]'
-                        }`}
+                        className={`w-full px-4 py-3 rounded-xl bg-white border text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none transition-colors disabled:opacity-60 disabled:cursor-not-allowed ${errors.email
+                          ? 'border-rose-400 focus:border-rose-500'
+                          : 'border-neutral-200 focus:border-[#31AAA9]'
+                          }`}
                       />
                       {errors.email && (
                         <p className="mt-1 text-xs text-rose-500 flex items-center gap-1 font-mono">
@@ -467,11 +477,10 @@ export default function Contact({ profile }: { profile: Profile }) {
                         if (errors.subject) setErrors({ ...errors, subject: undefined });
                       }}
                       placeholder="e.g. Software Developer Opportunity / Project Discussion"
-                      className={`w-full px-4 py-3 rounded-xl bg-white border text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none transition-colors disabled:opacity-60 disabled:cursor-not-allowed ${
-                        errors.subject
-                          ? 'border-rose-400 focus:border-rose-500'
-                          : 'border-neutral-200 focus:border-[#31AAA9]'
-                      }`}
+                      className={`w-full px-4 py-3 rounded-xl bg-white border text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none transition-colors disabled:opacity-60 disabled:cursor-not-allowed ${errors.subject
+                        ? 'border-rose-400 focus:border-rose-500'
+                        : 'border-neutral-200 focus:border-[#31AAA9]'
+                        }`}
                     />
                     {errors.subject && (
                       <p className="mt-1 text-xs text-rose-500 flex items-center gap-1 font-mono">
@@ -496,11 +505,10 @@ export default function Contact({ profile }: { profile: Profile }) {
                         if (errors.message) setErrors({ ...errors, message: undefined });
                       }}
                       placeholder="Tell me about your team, role, or project requirements..."
-                      className={`w-full px-4 py-3 rounded-xl bg-white border text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none transition-colors resize-y disabled:opacity-60 disabled:cursor-not-allowed ${
-                        errors.message
-                          ? 'border-rose-400 focus:border-rose-500'
-                          : 'border-neutral-200 focus:border-[#31AAA9]'
-                      }`}
+                      className={`w-full px-4 py-3 rounded-xl bg-white border text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none transition-colors resize-y disabled:opacity-60 disabled:cursor-not-allowed ${errors.message
+                        ? 'border-rose-400 focus:border-rose-500'
+                        : 'border-neutral-200 focus:border-[#31AAA9]'
+                        }`}
                     />
                     {errors.message && (
                       <p className="mt-1 text-xs text-rose-500 flex items-center gap-1 font-mono">
