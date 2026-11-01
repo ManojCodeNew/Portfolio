@@ -1,10 +1,6 @@
 name : first github workflow
 
 on:
-  push:
-    branches:
-      - manoj
-
   workflow_dispatch:
 
 jobs :
