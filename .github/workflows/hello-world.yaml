@@ -12,3 +12,9 @@ jobs :
     steps :
       - name : Print welcome message
         run : echo "Welcome to GitHub Actions I am Manoj"
+
+      - name: Show current directory
+        run: pwd
+
+      - name: Show repository files
+        run: ls -la
