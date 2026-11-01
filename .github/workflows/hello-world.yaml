@@ -3,12 +3,13 @@ name : first github workflow
 on : 
   push :
     branches: [manoj]
+  workflow_dispatch:
 
 jobs :
   frontend-test :
     name : First job 
     runs-on : ubuntu-latest
-
+    
     steps :
       - name : Print welcome message
         run : echo "Welcome to GitHub Actions I am Manoj"
